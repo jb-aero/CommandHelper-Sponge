@@ -66,7 +66,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Plugin(id = PomData.GROUP + "." + PomData.ARTIFACT_ID, name = PomData.NAME,
+@Plugin(id = PomData.ARTIFACT_ID, name = PomData.NAME,
 		version = PomData.VERSION, description = PomData.DESCRIPTION, url = PomData.WEBSITE)
 public class CommandHelperPlugin {
 
@@ -236,7 +236,7 @@ public class CommandHelperPlugin {
 			//Repopulate our cache for currently online players.
 			//New players that join later will get a lookup done
 			//on them at that time.
-			Static.HostnameCache(p.getName(), p.getConnection().getAddress().getHostName());
+			Static.HostnameCache(p.getName(), p.getConnection().getAddress());
 		}
 
 		//interpreter events

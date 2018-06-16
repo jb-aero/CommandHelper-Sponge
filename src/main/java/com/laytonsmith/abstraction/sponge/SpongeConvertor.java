@@ -31,7 +31,9 @@ import com.laytonsmith.commandhelper.CommandHelperPlugin;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.CRE.CREFormatException;
+import org.apache.tools.ant.taskdefs.Get;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.item.ItemType;
 
 import java.util.List;
@@ -111,11 +113,6 @@ public class SpongeConvertor extends AbstractConvertor {
 	}
 
 	@Override
-	public MCPotionData GetPotionData(int i) {
-		return null;
-	}
-
-	@Override
 	public void Startup(CommandHelperPlugin commandHelperPlugin) {
 
 	}
@@ -147,6 +144,10 @@ public class SpongeConvertor extends AbstractConvertor {
 
 	@Override
 	public MCEntity GetCorrectEntity(MCEntity mcEntity) {
+		return GetCorrectEntity((Entity) mcEntity.getHandle());
+	}
+
+	public static MCEntity GetCorrectEntity(Entity e) {
 		return null;
 	}
 

@@ -90,7 +90,7 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 
 	@Override
 	public double getHealth() {
-		return 0;
+		return getHandle().health().get();
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 
 	@Override
 	public double getMaxHealth() {
-		return 0;
+		return getHandle().maxHealth().get();
 	}
 
 	@Override
@@ -164,7 +164,17 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	}
 
 	@Override
+	public boolean isGliding() {
+		return false;
+	}
+
+	@Override
 	public boolean isLeashed() {
+		return false;
+	}
+
+	@Override
+	public boolean hasAI() {
 		return false;
 	}
 
@@ -185,7 +195,7 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 
 	@Override
 	public void setHealth(double v) {
-
+		getHandle().health().set(v);
 	}
 
 	@Override
@@ -225,6 +235,16 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 
 	@Override
 	public void setTarget(MCLivingEntity mcLivingEntity, Target target) {
+
+	}
+
+	@Override
+	public void setGliding(Boolean aBoolean) {
+
+	}
+
+	@Override
+	public void setAI(Boolean aBoolean) {
 
 	}
 

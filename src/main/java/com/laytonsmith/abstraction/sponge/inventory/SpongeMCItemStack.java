@@ -5,6 +5,7 @@ import com.laytonsmith.abstraction.MCItemMeta;
 import com.laytonsmith.abstraction.MCItemStack;
 import com.laytonsmith.abstraction.MCMaterialData;
 import com.laytonsmith.abstraction.blocks.MCMaterial;
+import org.spongepowered.api.data.manipulator.mutable.item.DurabilityData;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -23,12 +24,20 @@ public class SpongeMCItemStack implements MCItemStack {
 	}
 
 	@Override
+	public ItemStack getHandle() {
+		return item;
+	}
+
+	@Override
 	public MCMaterialData getData() {
 		return null;
 	}
 
 	@Override
 	public short getDurability() {
+		if (getHandle().supports(DurabilityData.class)) {
+			return getHandle().get(DurabilityData.class).get().durability().get().shortValue();
+		}
 		return 0;
 	}
 
@@ -74,12 +83,12 @@ public class SpongeMCItemStack implements MCItemStack {
 
 	@Override
 	public int maxStackSize() {
-		return 0;
+		return getHandle().getMaxStackQuantity();
 	}
 
 	@Override
 	public int getAmount() {
-		return 0;
+		return getHandle().getQuantity();
 	}
 
 	@Override
@@ -100,10 +109,5 @@ public class SpongeMCItemStack implements MCItemStack {
 	@Override
 	public void setItemMeta(MCItemMeta mcItemMeta) {
 
-	}
-
-	@Override
-	public Object getHandle() {
-		return null;
 	}
 }

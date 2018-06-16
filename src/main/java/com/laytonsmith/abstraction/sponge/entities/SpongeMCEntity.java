@@ -1,20 +1,22 @@
 package com.laytonsmith.abstraction.sponge.entities;
 
+import com.flowpowered.math.vector.Vector3d;
 import com.laytonsmith.PureUtilities.Vector3D;
-import com.laytonsmith.abstraction.MCEntity;
-import com.laytonsmith.abstraction.MCLocation;
-import com.laytonsmith.abstraction.MCMetadataValue;
-import com.laytonsmith.abstraction.MCPlugin;
-import com.laytonsmith.abstraction.MCServer;
-import com.laytonsmith.abstraction.MCWorld;
+import com.laytonsmith.abstraction.*;
 import com.laytonsmith.abstraction.enums.MCDamageCause;
 import com.laytonsmith.abstraction.enums.MCEntityEffect;
 import com.laytonsmith.abstraction.enums.MCEntityType;
 import com.laytonsmith.abstraction.enums.MCTeleportCause;
 import com.laytonsmith.abstraction.events.MCEntityDamageEvent;
+import com.laytonsmith.abstraction.sponge.SpongeConvertor;
+import com.laytonsmith.abstraction.sponge.SpongeMCLocation;
+import org.spongepowered.api.data.manipulator.mutable.entity.GravityData;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SpongeMCEntity implements MCEntity {
@@ -101,11 +103,15 @@ public class SpongeMCEntity implements MCEntity {
 
 	@Override
 	public UUID getUniqueId() {
-		return null;
+		return getHandle().getUniqueId();
 	}
 
 	@Override
 	public MCEntity getVehicle() {
+		Optional<Entity> v = getHandle().getVehicle();
+		if (v.isPresent()) {
+			return SpongeConvertor.GetCorrectEntity(v.get());
+		}
 		return null;
 	}
 
@@ -146,7 +152,7 @@ public class SpongeMCEntity implements MCEntity {
 
 	@Override
 	public boolean leaveVehicle() {
-		return false;
+		return getHandle().setVehicle(null);
 	}
 
 	@Override
@@ -156,7 +162,7 @@ public class SpongeMCEntity implements MCEntity {
 
 	@Override
 	public void remove() {
-
+		getHandle().remove();
 	}
 
 	@Override
@@ -186,7 +192,9 @@ public class SpongeMCEntity implements MCEntity {
 
 	@Override
 	public boolean teleport(MCEntity mcEntity) {
-		return false;
+		Location<World> loc = (Location<World>) mcEntity.getLocation().getHandle();
+		Vector3d rot = SpongeMCLocation.getRotation(mcEntity.getLocation());
+		return getHandle().setLocationAndRotation(loc, rot);
 	}
 
 	@Override
@@ -196,7 +204,9 @@ public class SpongeMCEntity implements MCEntity {
 
 	@Override
 	public boolean teleport(MCLocation mcLocation) {
-		return false;
+		Location<World> loc = (Location<World>) mcLocation.getHandle();
+		Vector3d rot = SpongeMCLocation.getRotation(mcLocation);
+		return getHandle().setLocationAndRotation(loc, rot);
 	}
 
 	@Override
@@ -222,6 +232,29 @@ public class SpongeMCEntity implements MCEntity {
 	@Override
 	public boolean isCustomNameVisible() {
 		return false;
+	}
+
+	@Override
+	public boolean isGlowing() {
+		return false;
+	}
+
+	@Override
+	public void setGlowing(Boolean aBoolean) {
+
+	}
+
+	@Override
+	public boolean hasGravity() {
+		if (getHandle().supports(GravityData.class)) {
+			return getHandle().get(GravityData.class).get().gravity().get();
+		}
+		return false;
+	}
+
+	@Override
+	public void setHasGravity(boolean b) {
+
 	}
 
 	@Override

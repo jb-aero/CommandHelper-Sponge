@@ -1,5 +1,6 @@
 package com.laytonsmith.abstraction.sponge;
 
+import com.flowpowered.math.vector.Vector3d;
 import com.laytonsmith.PureUtilities.Vector3D;
 import com.laytonsmith.abstraction.MCChunk;
 import com.laytonsmith.abstraction.MCLocation;
@@ -18,6 +19,10 @@ public class SpongeMCLocation implements MCLocation {
 	@Override
 	public Location<World> getHandle() {
 		return loc;
+	}
+
+	public static Vector3d getRotation(MCLocation loc) {
+		return new Vector3d(loc.getPitch(), loc.getYaw(), 0);
 	}
 
 	@Override

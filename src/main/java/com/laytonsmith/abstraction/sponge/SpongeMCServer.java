@@ -43,6 +43,19 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
+	public Server getHandle() {
+		return game.getServer();
+	}
+
+	public Server __Server() {
+		return game.getServer();
+	}
+
+	public Game __Game() {
+		return game;
+	}
+
+	@Override
 	public String getName() {
 		return null;
 	}
@@ -300,18 +313,5 @@ public class SpongeMCServer implements MCServer {
 	@Override
 	public String dispatchAndCaptureCommand(MCCommandSender commandSender, String cmd) {
 		return null;
-	}
-
-	@Override
-	public Server getHandle() {
-		return game.getServer();
-	}
-
-	public Server __Server() {
-		return game.getServer();
-	}
-
-	public Game __Game() {
-		return game;
 	}
 }
