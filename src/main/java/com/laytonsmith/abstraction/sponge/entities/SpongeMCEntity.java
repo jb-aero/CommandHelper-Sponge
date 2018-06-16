@@ -246,9 +246,12 @@ public class SpongeMCEntity implements MCEntity {
 
 	@Override
 	public boolean hasGravity() {
+<<<<<<< HEAD
 		if (getHandle().supports(GravityData.class)) {
 			return getHandle().get(GravityData.class).get().gravity().get();
 		}
+=======
+>>>>>>> f99d387686a8524c1abc9e94a436f3c393c43796
 		return false;
 	}
 

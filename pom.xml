@@ -55,7 +55,11 @@
 		<dependency>
 			<groupId>org.spongepowered</groupId>
 			<artifactId>spongeapi</artifactId>
+<<<<<<< HEAD
 			<version>6.0.0</version>
+=======
+			<version>5.1.0-SNAPSHOT</version>
+>>>>>>> f99d387686a8524c1abc9e94a436f3c393c43796
 			<scope>provided</scope>
 		</dependency>
 		<!--<dependency>
