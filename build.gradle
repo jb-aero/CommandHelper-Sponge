@@ -1,0 +1,70 @@
+
+
+plugins {
+    id 'de.fuerstenau.buildconfig' version '1.1.8'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'idea'
+
+tasks.build.dependsOn tasks.shadowJar
+
+group = 'org.enginehub'
+version = '0.1.0-SNAPSHOT'
+description = "CommandHelper is a full blown scripting language built right into Minecraft"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "CommandHelper"
+        url = "http://maven.sk89q.com/repo"
+    }
+    maven {
+        name = "Sponge"
+        url = "http://repo.spongepowered.org/maven"
+    }
+    maven {
+        name = "bStats"
+        url = "http://repo.bstats.org/content/repositories/releases/"
+    }
+}
+
+dependencies {
+    shadow(group: 'com.sk89q', name: 'commandhelper', version: '3.3.2-SNAPSHOT') {
+        exclude group: 'org.spigotmc', module: 'spigot-api'
+        exclude group: 'org.mcstats', module: 'metrics'
+    }
+    compileOnly group: 'org.spongepowered', name: 'spongeapi', version:'7.0.0'
+    shadow(group: 'org.bstats', name: 'bstats-sponge', version: '1.2')
+}
+
+buildConfig {
+    packageName = "com.laytonsmith.commandhelper"
+    clsName = "PomData"
+    buildConfigField "String", "WEBSITE", "http://wiki.sk89q.com/wiki/CommandHelper"
+    buildConfigField "String", "BRANDING", "CommandHelper"
+    buildConfigField "String", "DESCRIPTION", project.description
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    classifier = null
+    dependencies {
+        include dependency(":commandhelper")
+        include dependency(":bstats-sponge")
+    }
+    exclude "org/mcstats/**"
+    exclude "com/laytonsmith/abstraction/bukkit/**"
+    exclude "com/laytonsmith/abstraction/enums/bukkit/**"
+    exclude "com/laytonsmith/commandhelper/**"
+    exclude "com/laytonsmith/libs/org/mcstats/**"
+    exclude "jarInfo.ser"
+    exclude "plugin.yml"
+
+    relocate "org.bstats", "com.laytonsmith.libs.org.bstats"
+}

@@ -13,13 +13,7 @@ public class SpongePlayerListener {
 
 	@Listener(order = Order.FIRST)
 	public void onPlayerJoin(Join event) {
-<<<<<<< HEAD
-		Static.HostnameCache(event.getTargetEntity().getName(),
-				event.getTargetEntity().getConnection().getAddress()
-		);
-=======
 		Static.HostnameCache(event.getTargetEntity().getName(),	event.getTargetEntity().getConnection().getAddress());
->>>>>>> f99d387686a8524c1abc9e94a436f3c393c43796
 	}
 
 	@Listener(order = Order.FIRST)

@@ -1,5 +1,6 @@
 package com.laytonsmith.commandhelper;
 
+import org.bstats.sponge.Metrics;
 import com.google.inject.Inject;
 import com.laytonsmith.PureUtilities.ClassLoading.ClassDiscovery;
 import com.laytonsmith.PureUtilities.ClassLoading.ClassDiscoveryCache;
@@ -28,7 +29,6 @@ import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.extensions.ExtensionManager;
 import com.laytonsmith.core.profiler.Profiler;
 import com.laytonsmith.persistence.PersistenceNetwork;
-import org.mcstats.Metrics;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
@@ -40,7 +40,6 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.NamedCause;
 import org.spongepowered.api.event.command.SendCommandEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
@@ -66,8 +65,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@Plugin(id = PomData.ARTIFACT_ID, name = PomData.NAME,
-		version = PomData.VERSION, description = PomData.DESCRIPTION, url = PomData.WEBSITE)
+@Plugin(id = PomData.NAME, name = PomData.BRANDING,
+		version = PomData.VERSION, url = PomData.WEBSITE, description = PomData.DESCRIPTION)
 public class CommandHelperPlugin {
 
 	private static AliasCore ac;
@@ -182,16 +181,7 @@ public class CommandHelperPlugin {
 		}
 
 		//Metrics
-		Metrics.Graph graph = metrics.createGraph("Player count");
-		graph.addPlotter(new Metrics.Plotter("Player count") {
-
-			@Override
-			public int getValue() {
-				return Static.getServer().getOnlinePlayers().size();
-			}
-		});
-		metrics.addGraph(graph);
-		metrics.start();
+		metrics.addCustomChart(new Metrics.SimplePie("Server API", () -> "Sponge"));
 
 		try {
 			//This may seem redundant, but on a /reload, we want to refresh these
@@ -293,22 +283,18 @@ public class CommandHelperPlugin {
 
 	@Listener
 	public void onCommand(SendCommandEvent event) {
-		Optional<CommandSource> source = event.getCause().get(NamedCause.SOURCE, CommandSource.class);
-		if (!source.isPresent()) {
-			myServer.broadcastMessage("Skipping command.");
-			return;
-		}
+		CommandSource source = (CommandSource) event.getCause().root();
 
 		MCCommandSender sender;
 
-		if (source.get() instanceof Player) {
-			sender = new SpongeMCPlayer((Player) source.get());
-		} else if (source.get() instanceof ConsoleSource) {
-			sender = new SpongeMCConsole((ConsoleSource) source.get());
-		} else if (source.get() instanceof CommandBlockSource) {
-			sender = new SpongeMCCommandBlock((CommandBlockSource) source.get());
+		if (source instanceof Player) {
+			sender = new SpongeMCPlayer((Player) source);
+		} else if (source instanceof ConsoleSource) {
+			sender = new SpongeMCConsole((ConsoleSource) source);
+		} else if (source instanceof CommandBlockSource) {
+			sender = new SpongeMCCommandBlock((CommandBlockSource) source);
 		} else {
-			sender = new SpongeMCCommandSender(source.get());
+			sender = new SpongeMCCommandSender(source);
 		}
 	}
 
@@ -325,7 +311,7 @@ public class CommandHelperPlugin {
 
 	CommandSpec
 			recompile = CommandSpec.builder()
-			.permission(PomData.ARTIFACT_ID + ".reloadaliases")
+			.permission(PomData.NAME + ".reloadaliases")
 			.description(Text.builder("Reloads plugin settings and recompiles scripts. ").append(
 					urlTextHelper(Text.builder("[Help Page]").style(TextStyles.ITALIC).color(TextColors.YELLOW),
 							PomData.WEBSITE + "/Staged/Advanced_Guide#reloadaliases"
@@ -381,7 +367,7 @@ public class CommandHelperPlugin {
 							Text.builder("[Help Page]").style(TextStyles.ITALIC).color(TextColors.YELLOW),
 							PomData.WEBSITE + "/Interpreter_Mode"
 					)).build())
-					.permission(PomData.ARTIFACT_ID + ".interpreter")
+					.permission(PomData.NAME + ".interpreter")
 					.executor(((src, args) -> {
 						if (src instanceof Player) {
 							if (!Prefs.EnableInterpreter()) {

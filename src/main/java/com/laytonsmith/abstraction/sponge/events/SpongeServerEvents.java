@@ -78,7 +78,7 @@ public class SpongeServerEvents {
 							return new IllegalArgumentException("Tried to construct " + this.getClass().getName()
 									+ " with a " + event.getClass().getName()
 									+ " not caused by a player. Causes include: "
-									+ event.getCause().getNamedCauses().toString());
+									+ event.getCause().all().toString());
 						}
 					}
 			));
