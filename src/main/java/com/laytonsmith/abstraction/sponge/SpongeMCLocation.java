@@ -6,6 +6,7 @@ import com.laytonsmith.abstraction.MCChunk;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.MCWorld;
 import com.laytonsmith.abstraction.blocks.MCBlock;
+import com.laytonsmith.abstraction.sponge.blocks.SpongeMCBlock;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -91,8 +92,9 @@ public class SpongeMCLocation implements MCLocation {
 	}
 
 	@Override
-	public MCBlock getBlock() {
-		return null;
+	public MCBlock getBlock()
+	{
+		return new SpongeMCBlock(getHandle().getBlock());
 	}
 
 	@Override

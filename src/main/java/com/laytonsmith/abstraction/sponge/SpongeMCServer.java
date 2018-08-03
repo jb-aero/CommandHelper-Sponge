@@ -25,10 +25,12 @@ import org.spongepowered.api.Server;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.chat.ChatTypes;
+import org.spongepowered.api.world.World;
 
 import java.net.InetSocketAddress;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -88,7 +90,9 @@ public class SpongeMCServer implements MCServer {
 
 	@Override
 	public MCWorld getWorld(String name) {
-		return null;
+
+		Optional<World> ow = __Server().getWorld(name);
+		return ow.isPresent() ? new SpongeMCWorld(ow.get()) : null;
 	}
 
 	@Override
