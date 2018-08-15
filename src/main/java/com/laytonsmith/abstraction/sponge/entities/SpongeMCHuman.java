@@ -5,6 +5,7 @@ import com.laytonsmith.abstraction.MCInventory;
 import com.laytonsmith.abstraction.MCInventoryView;
 import com.laytonsmith.abstraction.MCItemStack;
 import com.laytonsmith.abstraction.MCLocation;
+import com.laytonsmith.abstraction.blocks.MCMaterial;
 import com.laytonsmith.abstraction.enums.MCGameMode;
 import org.spongepowered.api.entity.living.Humanoid;
 
@@ -98,6 +99,18 @@ public class SpongeMCHuman extends SpongeMCLiving implements MCHumanEntity {
 
 	@Override
 	public void setItemOnCursor(MCItemStack mcItemStack) {
+
+	}
+
+	@Override
+	public int getCooldown(MCMaterial material)
+	{
+		return 0;
+	}
+
+	@Override
+	public void setCooldown(MCMaterial material, int ticks)
+	{
 
 	}
 

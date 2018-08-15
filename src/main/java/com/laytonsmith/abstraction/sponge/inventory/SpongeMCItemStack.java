@@ -3,7 +3,6 @@ package com.laytonsmith.abstraction.sponge.inventory;
 import com.laytonsmith.abstraction.MCEnchantment;
 import com.laytonsmith.abstraction.MCItemMeta;
 import com.laytonsmith.abstraction.MCItemStack;
-import com.laytonsmith.abstraction.MCMaterialData;
 import com.laytonsmith.abstraction.blocks.MCMaterial;
 import org.spongepowered.api.data.manipulator.mutable.item.DurabilityData;
 import org.spongepowered.api.item.ItemType;
@@ -26,11 +25,6 @@ public class SpongeMCItemStack implements MCItemStack {
 	@Override
 	public ItemStack getHandle() {
 		return item;
-	}
-
-	@Override
-	public MCMaterialData getData() {
-		return null;
 	}
 
 	@Override
@@ -77,7 +71,8 @@ public class SpongeMCItemStack implements MCItemStack {
 	}
 
 	@Override
-	public void setTypeId(int i) {
+	public void setType(MCMaterial type)
+	{
 
 	}
 
@@ -92,7 +87,8 @@ public class SpongeMCItemStack implements MCItemStack {
 	}
 
 	@Override
-	public void setData(int i) {
+	public void setAmount(int amt)
+	{
 
 	}
 
@@ -109,5 +105,11 @@ public class SpongeMCItemStack implements MCItemStack {
 	@Override
 	public void setItemMeta(MCItemMeta mcItemMeta) {
 
+	}
+
+	@Override
+	public boolean isEmpty()
+	{
+		return false;
 	}
 }

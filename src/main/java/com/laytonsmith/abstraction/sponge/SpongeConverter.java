@@ -1,23 +1,7 @@
 package com.laytonsmith.abstraction.sponge;
 
-import com.laytonsmith.abstraction.AbstractConvertor;
+import com.laytonsmith.abstraction.*;
 import com.laytonsmith.abstraction.Implementation.Type;
-import com.laytonsmith.abstraction.MCColor;
-import com.laytonsmith.abstraction.MCEnchantment;
-import com.laytonsmith.abstraction.MCEntity;
-import com.laytonsmith.abstraction.MCFireworkBuilder;
-import com.laytonsmith.abstraction.MCInventory;
-import com.laytonsmith.abstraction.MCItemMeta;
-import com.laytonsmith.abstraction.MCItemStack;
-import com.laytonsmith.abstraction.MCLocation;
-import com.laytonsmith.abstraction.MCMetadataValue;
-import com.laytonsmith.abstraction.MCNote;
-import com.laytonsmith.abstraction.MCPattern;
-import com.laytonsmith.abstraction.MCPlugin;
-import com.laytonsmith.abstraction.MCPluginMeta;
-import com.laytonsmith.abstraction.MCPotionData;
-import com.laytonsmith.abstraction.MCRecipe;
-import com.laytonsmith.abstraction.MCWorld;
 import com.laytonsmith.abstraction.blocks.MCMaterial;
 import com.laytonsmith.abstraction.enums.MCDyeColor;
 import com.laytonsmith.abstraction.enums.MCPatternShape;
@@ -40,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @convert(type = Type.SPONGE)
-public class SpongeConvertor extends AbstractConvertor {
+public class SpongeConverter extends AbstractConvertor {
 
 	private static SpongeMCPluginMeta pluginMeta = null;
 	private static SpongeMCServer game = null;
@@ -118,17 +102,19 @@ public class SpongeConvertor extends AbstractConvertor {
 	}
 
 	@Override
-	public int LookupItemId(String s) {
-		return 0;
-	}
-
-	@Override
-	public String LookupMaterialName(int i) {
+	public MCMaterial getMaterial(int i) {
 		return null;
 	}
 
 	@Override
-	public MCMaterial getMaterial(int i) {
+	public MCMaterial GetMaterialFromLegacy(String name, int data)
+	{
+		return null;
+	}
+
+	@Override
+	public MCMaterial GetMaterialFromLegacy(int id, int data)
+	{
 		return null;
 	}
 
@@ -172,6 +158,12 @@ public class SpongeConvertor extends AbstractConvertor {
 	}
 
 	@Override
+	public MCInventoryHolder CreateInventoryHolder(String id)
+	{
+		return null;
+	}
+
+	@Override
 	public MCNote GetNote(int i, MCTone mcTone, boolean b) {
 		return null;
 	}
@@ -202,7 +194,8 @@ public class SpongeConvertor extends AbstractConvertor {
 	}
 
 	@Override
-	public MCRecipe GetNewRecipe(MCRecipeType mcRecipeType, MCItemStack mcItemStack) {
+	public MCRecipe GetNewRecipe(String key, MCRecipeType type, MCItemStack result)
+	{
 		return null;
 	}
 

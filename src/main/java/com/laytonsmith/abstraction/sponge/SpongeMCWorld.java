@@ -3,30 +3,36 @@ package com.laytonsmith.abstraction.sponge;
 import com.laytonsmith.abstraction.MCChunk;
 import com.laytonsmith.abstraction.MCEntity;
 import com.laytonsmith.abstraction.MCFireworkEffect;
-import com.laytonsmith.abstraction.MCItem;
 import com.laytonsmith.abstraction.MCItemStack;
-import com.laytonsmith.abstraction.MCLightningStrike;
 import com.laytonsmith.abstraction.MCLivingEntity;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.abstraction.MCWorld;
+import com.laytonsmith.abstraction.MCWorldBorder;
 import com.laytonsmith.abstraction.blocks.MCBlock;
+import com.laytonsmith.abstraction.blocks.MCBlockData;
 import com.laytonsmith.abstraction.entities.MCFallingBlock;
 import com.laytonsmith.abstraction.entities.MCFirework;
+import com.laytonsmith.abstraction.entities.MCItem;
+import com.laytonsmith.abstraction.entities.MCLightningStrike;
 import com.laytonsmith.abstraction.enums.MCBiomeType;
 import com.laytonsmith.abstraction.enums.MCDifficulty;
 import com.laytonsmith.abstraction.enums.MCEffect;
 import com.laytonsmith.abstraction.enums.MCEntityType;
 import com.laytonsmith.abstraction.enums.MCGameRule;
 import com.laytonsmith.abstraction.enums.MCMobs;
+import com.laytonsmith.abstraction.enums.MCParticle;
 import com.laytonsmith.abstraction.enums.MCSound;
+import com.laytonsmith.abstraction.enums.MCSoundCategory;
 import com.laytonsmith.abstraction.enums.MCTreeType;
 import com.laytonsmith.abstraction.enums.MCWorldEnvironment;
 import com.laytonsmith.abstraction.enums.MCWorldType;
+import com.laytonsmith.abstraction.sponge.blocks.SpongeMCBlock;
 import com.laytonsmith.abstraction.sponge.entities.SpongeMCEntity;
 import com.laytonsmith.abstraction.sponge.entities.SpongeMCLiving;
 import com.laytonsmith.abstraction.sponge.entities.SpongeMCPlayer;
 import com.laytonsmith.core.constructs.CArray;
+import com.laytonsmith.core.constructs.CClosure;
 import com.laytonsmith.core.constructs.Target;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
@@ -176,15 +182,27 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 	}
 
 	@Override
-	public boolean getGameRuleValue(MCGameRule mcGameRule)
+	public String[] getGameRules()
+	{
+		return new String[0];
+	}
+
+	@Override
+	public String getGameRuleValue(String gameRule)
+	{
+		return null;
+	}
+
+	@Override
+	public boolean setGameRuleValue(MCGameRule gameRule, String value)
 	{
 		return false;
 	}
 
 	@Override
-	public void setGameRuleValue(MCGameRule mcGameRule, boolean b)
+	public MCWorldBorder getWorldBorder()
 	{
-
+		return null;
 	}
 
 	@Override
@@ -236,6 +254,12 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 	}
 
 	@Override
+	public MCEntity spawn(MCLocation l, MCEntityType entType, CClosure closure)
+	{
+		return null;
+	}
+
+	@Override
 	public MCEntity spawn(MCLocation mcLocation, MCEntityType.MCVanillaEntityType mcVanillaEntityType)
 	{
 		return null;
@@ -254,6 +278,12 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 	}
 
 	@Override
+	public void spawnParticle(MCLocation l, MCParticle pa, int count, double offsetX, double offsetY, double offsetZ, double velocity, Object data)
+	{
+
+	}
+
+	@Override
 	public void playSound(MCLocation mcLocation, MCSound mcSound, float v, float v1)
 	{
 
@@ -261,6 +291,18 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 
 	@Override
 	public void playSound(MCLocation mcLocation, String s, float v, float v1)
+	{
+
+	}
+
+	@Override
+	public void playSound(MCLocation l, MCSound sound, MCSoundCategory category, float volume, float pitch)
+	{
+
+	}
+
+	@Override
+	public void playSound(MCLocation l, String sound, MCSoundCategory category, float volume, float pitch)
 	{
 
 	}
@@ -374,7 +416,7 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 	}
 
 	@Override
-	public MCFallingBlock spawnFallingBlock(MCLocation mcLocation, int i, byte b)
+	public MCFallingBlock spawnFallingBlock(MCLocation loc, MCBlockData data)
 	{
 		return null;
 	}

@@ -2,13 +2,17 @@ package com.laytonsmith.abstraction.sponge.entities;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.laytonsmith.PureUtilities.Vector3D;
-import com.laytonsmith.abstraction.*;
-import com.laytonsmith.abstraction.enums.MCDamageCause;
+import com.laytonsmith.abstraction.MCEntity;
+import com.laytonsmith.abstraction.MCLocation;
+import com.laytonsmith.abstraction.MCMetadataValue;
+import com.laytonsmith.abstraction.MCPlugin;
+import com.laytonsmith.abstraction.MCServer;
+import com.laytonsmith.abstraction.MCWorld;
 import com.laytonsmith.abstraction.enums.MCEntityEffect;
 import com.laytonsmith.abstraction.enums.MCEntityType;
 import com.laytonsmith.abstraction.enums.MCTeleportCause;
 import com.laytonsmith.abstraction.events.MCEntityDamageEvent;
-import com.laytonsmith.abstraction.sponge.SpongeConvertor;
+import com.laytonsmith.abstraction.sponge.SpongeConverter;
 import com.laytonsmith.abstraction.sponge.SpongeMCLocation;
 import org.spongepowered.api.data.manipulator.mutable.entity.GravityData;
 import org.spongepowered.api.entity.Entity;
@@ -17,6 +21,7 @@ import org.spongepowered.api.world.World;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public class SpongeMCEntity implements MCEntity {
@@ -37,16 +42,6 @@ public class SpongeMCEntity implements MCEntity {
 	}
 
 	@Override
-	public void fireEntityDamageEvent(MCDamageCause mcDamageCause) {
-
-	}
-
-	@Override
-	public int getEntityId() {
-		return 0;
-	}
-
-	@Override
 	public float getFallDistance() {
 		return 0;
 	}
@@ -63,11 +58,6 @@ public class SpongeMCEntity implements MCEntity {
 
 	@Override
 	public MCLocation getLocation() {
-		return null;
-	}
-
-	@Override
-	public MCLocation asyncGetLocation() {
 		return null;
 	}
 
@@ -110,7 +100,7 @@ public class SpongeMCEntity implements MCEntity {
 	public MCEntity getVehicle() {
 		Optional<Entity> v = getHandle().getVehicle();
 		if (v.isPresent()) {
-			return SpongeConvertor.GetCorrectEntity(v.get());
+			return SpongeConverter.GetCorrectEntity(v.get());
 		}
 		return null;
 	}
@@ -255,6 +245,48 @@ public class SpongeMCEntity implements MCEntity {
 	@Override
 	public void setHasGravity(boolean b) {
 
+	}
+
+	@Override
+	public boolean isSilent()
+	{
+		return false;
+	}
+
+	@Override
+	public void setSilent(boolean silent)
+	{
+
+	}
+
+	@Override
+	public boolean isInvulnerable()
+	{
+		return false;
+	}
+
+	@Override
+	public void setInvulnerable(boolean invulnerable)
+	{
+
+	}
+
+	@Override
+	public Set<String> getScoreboardTags()
+	{
+		return null;
+	}
+
+	@Override
+	public boolean addScoreboardTag(String tag)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean removeScoreboardTag(String tag)
+	{
+		return false;
 	}
 
 	@Override

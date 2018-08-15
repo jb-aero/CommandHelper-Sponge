@@ -4,6 +4,7 @@ import com.laytonsmith.abstraction.MCItemStack;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.MCWorld;
 import com.laytonsmith.abstraction.blocks.MCBlock;
+import com.laytonsmith.abstraction.blocks.MCBlockData;
 import com.laytonsmith.abstraction.blocks.MCBlockFace;
 import com.laytonsmith.abstraction.blocks.MCBlockState;
 import com.laytonsmith.abstraction.blocks.MCCommandBlock;
@@ -15,7 +16,7 @@ import org.spongepowered.api.block.BlockState;
 
 import java.util.Collection;
 
-public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock
+public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock, MCBlockState
 {
 	BlockState handle;
 	public SpongeMCBlock(BlockState block)
@@ -47,6 +48,18 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock
 	}
 
 	@Override
+	public void setType(MCMaterial mat)
+	{
+
+	}
+
+	@Override
+	public void setType(MCMaterial mat, boolean physics)
+	{
+
+	}
+
+	@Override
 	public void setTypeId(int i)
 	{
 
@@ -65,6 +78,18 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock
 	}
 
 	@Override
+	public MCBlockData getBlockData()
+	{
+		return null;
+	}
+
+	@Override
+	public void setBlockData(MCBlockData data, boolean physics)
+	{
+
+	}
+
+	@Override
 	public double getTemperature()
 	{
 		return 0;
@@ -78,6 +103,12 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock
 
 	@Override
 	public MCMaterial getType()
+	{
+		return null;
+	}
+
+	@Override
+	public MCBlock getBlock()
 	{
 		return null;
 	}
@@ -113,6 +144,12 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock
 	}
 
 	@Override
+	public void update()
+	{
+
+	}
+
+	@Override
 	public MCSign getSign()
 	{
 		return null;
@@ -144,12 +181,6 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock
 
 	@Override
 	public boolean isDispenser()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isNull()
 	{
 		return false;
 	}
@@ -230,5 +261,11 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock
 	public MCBlockFace getFace(MCBlock mcBlock)
 	{
 		return null;
+	}
+
+	@Override
+	public boolean isEmpty()
+	{
+		return false;
 	}
 }

@@ -49,7 +49,8 @@ public class SpongeMCScoreboard implements MCScoreboard {
 	}
 
 	@Override
-	public MCTeam getPlayerTeam(MCOfflinePlayer mcOfflinePlayer) {
+	public MCTeam getPlayerTeam(String entry)
+	{
 		return null;
 	}
 

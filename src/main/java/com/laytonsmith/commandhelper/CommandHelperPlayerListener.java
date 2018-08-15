@@ -64,7 +64,6 @@ public class CommandHelperPlayerListener {
 			//They are in interpreter mode, so we want it to handle this, not everything else.
 			return;
 		}
-		EventUtils.TriggerExternal(event);
 		EventUtils.TriggerListener(Driver.PLAYER_COMMAND, "player_command", event);
 		if (event.isCancelled()) {
 			return;

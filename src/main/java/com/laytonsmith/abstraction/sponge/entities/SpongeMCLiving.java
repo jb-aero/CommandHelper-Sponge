@@ -6,8 +6,9 @@ import com.laytonsmith.abstraction.MCEntityEquipment;
 import com.laytonsmith.abstraction.MCLivingEntity;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.MCPlayer;
-import com.laytonsmith.abstraction.MCProjectile;
 import com.laytonsmith.abstraction.blocks.MCBlock;
+import com.laytonsmith.abstraction.blocks.MCMaterial;
+import com.laytonsmith.abstraction.entities.MCProjectile;
 import com.laytonsmith.abstraction.enums.MCProjectileType;
 import com.laytonsmith.core.constructs.Target;
 import org.spongepowered.api.entity.living.Living;
@@ -29,13 +30,20 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	}
 
 	@Override
-	public void addEffect(int i, int i1, int i2, boolean b, boolean b1, Target target) {
+	public void addEffect(int potionID, int strength, int ticks, boolean ambient, boolean particles, boolean icon)
+	{
 
 	}
 
 	@Override
 	public boolean removeEffect(int i) {
 		return false;
+	}
+
+	@Override
+	public void removeEffects()
+	{
+
 	}
 
 	@Override
@@ -114,22 +122,20 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	}
 
 	@Override
-	public MCBlock getTargetBlock(HashSet<Short> hashSet, int i, boolean b) {
+	public MCBlock getTargetBlock(HashSet<MCMaterial> transparent, int maxDistance)
+	{
 		return null;
 	}
 
 	@Override
-	public MCBlock getTargetBlock(HashSet<Byte> hashSet, int i) {
+	public MCBlock getTargetSpace(int maxDistance)
+	{
 		return null;
 	}
 
 	@Override
-	public List<MCBlock> getLastTwoTargetBlocks(HashSet<Byte> hashSet, int i) {
-		return null;
-	}
-
-	@Override
-	public List<MCBlock> getLineOfSight(HashSet<Byte> hashSet, int i) {
+	public List<MCBlock> getLineOfSight(HashSet<MCMaterial> transparent, int maxDistance)
+	{
 		return null;
 	}
 

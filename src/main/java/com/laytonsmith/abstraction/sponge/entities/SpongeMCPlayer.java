@@ -8,11 +8,19 @@ import com.laytonsmith.abstraction.MCNote;
 import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.abstraction.MCPlayerInventory;
 import com.laytonsmith.abstraction.MCScoreboard;
+import com.laytonsmith.abstraction.blocks.MCBlockData;
+import com.laytonsmith.abstraction.blocks.MCMaterial;
 import com.laytonsmith.abstraction.enums.MCInstrument;
+import com.laytonsmith.abstraction.enums.MCParticle;
 import com.laytonsmith.abstraction.enums.MCSound;
+import com.laytonsmith.abstraction.enums.MCSoundCategory;
 import com.laytonsmith.abstraction.enums.MCWeather;
 import com.laytonsmith.abstraction.sponge.SpongeMCLocation;
+import com.laytonsmith.commandhelper.CommandHelperPlugin;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.EventContext;
+import org.spongepowered.api.text.Text;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -53,7 +61,7 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 
 	@Override
 	public void chat(String s) {
-
+		getHandle().simulateChat(Text.of(s), Cause.of(EventContext.empty(), CommandHelperPlugin.class));
 	}
 
 	@Override
@@ -168,7 +176,7 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 
 	@Override
 	public void kickPlayer(String s) {
-
+		getHandle().kick(Text.of(s));
 	}
 
 	@Override
@@ -182,12 +190,13 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 	}
 
 	@Override
-	public void sendTexturePack(String s) {
+	public void sendResourcePack(String s) {
 
 	}
 
 	@Override
-	public void sendResourcePack(String s) {
+	public void sendTitle(String title, String subtitle, int fadein, int stay, int fadeout)
+	{
 
 	}
 
@@ -277,7 +286,14 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 	}
 
 	@Override
-	public void sendBlockChange(MCLocation mcLocation, int i, byte b) {
+	public void sendBlockChange(MCLocation loc, MCMaterial material, byte data)
+	{
+
+	}
+
+	@Override
+	public void sendBlockChange(MCLocation loc, MCBlockData data)
+	{
 
 	}
 
@@ -288,11 +304,6 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 
 	@Override
 	public MCLocation getLocation() {
-		return new SpongeMCLocation(getHandle().getLocation());
-	}
-
-	@Override
-	public MCLocation asyncGetLocation() {
 		return new SpongeMCLocation(getHandle().getLocation());
 	}
 
@@ -308,6 +319,48 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 
 	@Override
 	public void playSound(MCLocation mcLocation, String s, float v, float v1) {
+
+	}
+
+	@Override
+	public void playSound(MCLocation l, MCSound sound, MCSoundCategory category, float volume, float pitch)
+	{
+
+	}
+
+	@Override
+	public void playSound(MCLocation l, String sound, MCSoundCategory category, float volume, float pitch)
+	{
+
+	}
+
+	@Override
+	public void stopSound(MCSound sound)
+	{
+
+	}
+
+	@Override
+	public void stopSound(String sound)
+	{
+
+	}
+
+	@Override
+	public void stopSound(MCSound sound, MCSoundCategory category)
+	{
+
+	}
+
+	@Override
+	public void stopSound(String sound, MCSoundCategory category)
+	{
+
+	}
+
+	@Override
+	public void spawnParticle(MCLocation l, MCParticle pa, int count, double offsetX, double offsetY, double offsetZ, double velocity, Object data)
+	{
 
 	}
 
@@ -429,11 +482,6 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 	@Override
 	public boolean isWhitelisted() {
 		return false;
-	}
-
-	@Override
-	public void setBanned(boolean b) {
-
 	}
 
 	@Override

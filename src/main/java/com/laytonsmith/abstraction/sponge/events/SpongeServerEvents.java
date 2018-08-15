@@ -1,8 +1,9 @@
 package com.laytonsmith.abstraction.sponge.events;
 
 import com.laytonsmith.PureUtilities.Common.StringUtils;
-import com.laytonsmith.abstraction.events.MCConsoleCommandEvent;
+import com.laytonsmith.abstraction.MCCommandSender;
 import com.laytonsmith.abstraction.events.MCPlayerCommandEvent;
+import com.laytonsmith.abstraction.events.MCServerCommandEvent;
 import com.laytonsmith.abstraction.sponge.SpongeMCCommandSender;
 import com.laytonsmith.abstraction.sponge.entities.SpongeMCPlayer;
 import org.spongepowered.api.command.CommandSource;
@@ -13,7 +14,7 @@ import java.util.function.Supplier;
 
 public class SpongeServerEvents {
 
-	public static class SpongeMCCommandEvent implements MCConsoleCommandEvent, MCPlayerCommandEvent {
+	public static class SpongeMCCommandEvent implements MCServerCommandEvent, MCPlayerCommandEvent {
 
 		SendCommandEvent event;
 
@@ -57,6 +58,12 @@ public class SpongeServerEvents {
 				_GetObject().setCommand(s.substring(0, Math.max(split, s.length())));
 				_GetObject().setArguments(s.substring(split + 1));
 			}
+		}
+
+		@Override
+		public MCCommandSender getCommandSender()
+		{
+			return getSender();
 		}
 
 		@Override

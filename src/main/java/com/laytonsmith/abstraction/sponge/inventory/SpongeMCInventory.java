@@ -61,6 +61,12 @@ public class SpongeMCInventory implements MCInventory
 	}
 
 	@Override
+	public void updateViewers()
+	{
+
+	}
+
+	@Override
 	public void clear()
 	{
 

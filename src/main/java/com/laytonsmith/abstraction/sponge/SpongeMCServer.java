@@ -1,20 +1,9 @@
 package com.laytonsmith.abstraction.sponge;
 
-import com.laytonsmith.abstraction.MCCommandException;
-import com.laytonsmith.abstraction.MCCommandMap;
-import com.laytonsmith.abstraction.MCCommandSender;
-import com.laytonsmith.abstraction.MCConsoleCommandSender;
-import com.laytonsmith.abstraction.MCInventory;
-import com.laytonsmith.abstraction.MCInventoryHolder;
-import com.laytonsmith.abstraction.MCItemFactory;
-import com.laytonsmith.abstraction.MCItemStack;
-import com.laytonsmith.abstraction.MCOfflinePlayer;
-import com.laytonsmith.abstraction.MCPlayer;
-import com.laytonsmith.abstraction.MCPluginManager;
-import com.laytonsmith.abstraction.MCRecipe;
-import com.laytonsmith.abstraction.MCScoreboard;
-import com.laytonsmith.abstraction.MCServer;
-import com.laytonsmith.abstraction.MCWorld;
+import com.laytonsmith.abstraction.*;
+import com.laytonsmith.abstraction.blocks.MCBlockData;
+import com.laytonsmith.abstraction.enums.MCBarColor;
+import com.laytonsmith.abstraction.enums.MCBarStyle;
 import com.laytonsmith.abstraction.enums.MCInventoryType;
 import com.laytonsmith.abstraction.enums.MCVersion;
 import com.laytonsmith.abstraction.pluginmessages.MCMessenger;
@@ -89,6 +78,12 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
+	public MCEntity getEntity(UUID uuid)
+	{
+		return null;
+	}
+
+	@Override
 	public MCWorld getWorld(String name) {
 
 		Optional<World> ow = __Server().getWorld(name);
@@ -112,6 +107,12 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
+	public void broadcastMessage(String message, Set<MCCommandSender> recipients)
+	{
+		recipients.stream().forEach(cs -> cs.sendMessage(message));
+	}
+
+	@Override
 	public MCConsoleCommandSender getConsole() {
 		return new SpongeMCConsole(__Server().getConsole());
 	}
@@ -127,17 +128,13 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
-	public MCInventory createInventory(MCInventoryHolder owner, MCInventoryType type) {
+	public MCInventory createInventory(MCInventoryHolder owner, MCInventoryType type, String title)
+	{
 		return null;
 	}
 
 	@Override
 	public MCInventory createInventory(MCInventoryHolder owner, int size, String title) {
-		return null;
-	}
-
-	@Override
-	public MCInventory createInventory(MCInventoryHolder owner, int size) {
 		return null;
 	}
 
@@ -159,6 +156,12 @@ public class SpongeMCServer implements MCServer {
 	@Override
 	public String getServerName() {
 		return __Server().getDefaultWorldName();
+	}
+
+	@Override
+	public String getMotd()
+	{
+		return null;
 	}
 
 	@Override
@@ -240,6 +243,18 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
+	public void banName(String name)
+	{
+
+	}
+
+	@Override
+	public void unbanName(String name)
+	{
+
+	}
+
+	@Override
 	public void banIP(String address) {
 
 	}
@@ -316,6 +331,18 @@ public class SpongeMCServer implements MCServer {
 
 	@Override
 	public String dispatchAndCaptureCommand(MCCommandSender commandSender, String cmd) {
+		return null;
+	}
+
+	@Override
+	public MCBossBar createBossBar(String title, MCBarColor color, MCBarStyle style)
+	{
+		return null;
+	}
+
+	@Override
+	public MCBlockData createBlockData(String data)
+	{
 		return null;
 	}
 }

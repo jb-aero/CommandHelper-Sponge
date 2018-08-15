@@ -133,8 +133,8 @@ public class CommandHelperInterpreterListener {
 	}
 
 	public void execute(String script, final MCPlayer p) throws ConfigCompileException, ConfigCompileGroupException {
-		List<Token> stream = MethodScriptCompiler.lex(script, new File("Interpreter"), true);
-		ParseTree tree = MethodScriptCompiler.compile(stream);
+		ParseTree tree = MethodScriptCompiler.compile(MethodScriptCompiler.lex(script,
+				new File("Interpreter"), true));
 		interpreterMode.remove(p.getName());
 		GlobalEnv gEnv = new GlobalEnv(plugin.executionQueue, plugin.profiler, plugin.persistenceNetwork,
 				CommandHelperFileLocations.getDefault().getConfigDirectory(),

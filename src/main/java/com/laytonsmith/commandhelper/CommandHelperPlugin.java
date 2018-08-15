@@ -143,7 +143,7 @@ public class CommandHelperPlugin {
 		StreamUtils.GetSystemOut().println("[CommandHelper] Running initial class discovery,"
 				+ " this will probably take a few seconds...");
 
-		// ReflectionUtils.set(StaticLayer.class, "convertor", new SpongeConvertor()); // ClassDiscovery broke
+		// ReflectionUtils.set(StaticLayer.class, "convertor", new SpongeConverter()); // ClassDiscovery broke
 		myServer = StaticLayer.GetServer();
 		StreamUtils.GetSystemOut().println("[CommandHelper] Loading extensions in the background...");
 

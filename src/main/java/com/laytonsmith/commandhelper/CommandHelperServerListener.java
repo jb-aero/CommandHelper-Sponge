@@ -6,6 +6,7 @@ import com.laytonsmith.abstraction.sponge.SpongeMCConsole;
 import com.laytonsmith.abstraction.sponge.events.SpongeServerEvents.SpongeMCCommandEvent;
 import com.laytonsmith.core.InternalException;
 import com.laytonsmith.core.Static;
+import com.laytonsmith.core.events.Driver;
 import com.laytonsmith.core.events.EventUtils;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
 import org.spongepowered.api.command.source.ConsoleSource;
@@ -20,7 +21,7 @@ public class CommandHelperServerListener {
 
 	public void onServerCommand(SpongeMCCommandEvent event) {
 		//Run this first, so external events can intercept it.
-		EventUtils.TriggerExternal(event);
+		EventUtils.TriggerListener(Driver.SERVER_COMMAND, "server_command", event);
 		SpongeMCCommandSender sender = event.getSender();
 		if (sender.getHandle() instanceof ConsoleSource) {
 			//Need the more specific subtype for player()

@@ -20,6 +20,7 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {
         name = "CommandHelper"
         url = "http://maven.sk89q.com/repo"
@@ -35,9 +36,9 @@ repositories {
 }
 
 dependencies {
-    shadow(group: 'com.sk89q', name: 'commandhelper', version: '3.3.2-SNAPSHOT') {
+    shadow(group: 'com.sk89q', name: 'commandhelper', version: '3.3.3-SNAPSHOT') {
         exclude group: 'org.spigotmc', module: 'spigot-api'
-        exclude group: 'org.mcstats', module: 'metrics'
+        exclude group: 'org.bukkit'
     }
     compileOnly group: 'org.spongepowered', name: 'spongeapi', version:'7.0.0'
     shadow(group: 'org.bstats', name: 'bstats-sponge', version: '1.2')
