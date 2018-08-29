@@ -243,7 +243,7 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
-	public void banName(String name)
+	public void banName(String name, String reason, String source)
 	{
 
 	}

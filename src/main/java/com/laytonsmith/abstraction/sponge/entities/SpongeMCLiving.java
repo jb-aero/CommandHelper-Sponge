@@ -9,6 +9,7 @@ import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.abstraction.blocks.MCBlock;
 import com.laytonsmith.abstraction.blocks.MCMaterial;
 import com.laytonsmith.abstraction.entities.MCProjectile;
+import com.laytonsmith.abstraction.enums.MCPotionEffectType;
 import com.laytonsmith.abstraction.enums.MCProjectileType;
 import com.laytonsmith.core.constructs.Target;
 import org.spongepowered.api.entity.living.Living;
@@ -30,13 +31,14 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	}
 
 	@Override
-	public void addEffect(int potionID, int strength, int ticks, boolean ambient, boolean particles, boolean icon)
+	public boolean addEffect(MCPotionEffectType type, int strength, int ticks, boolean ambient, boolean particles, boolean icon)
 	{
-
+		return false;
 	}
 
 	@Override
-	public boolean removeEffect(int i) {
+	public boolean removeEffect(MCPotionEffectType type)
+	{
 		return false;
 	}
 
@@ -44,11 +46,6 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	public void removeEffects()
 	{
 
-	}
-
-	@Override
-	public int getMaxEffect() {
-		return 0;
 	}
 
 	@Override
@@ -251,6 +248,18 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 
 	@Override
 	public void setAI(Boolean aBoolean) {
+
+	}
+
+	@Override
+	public boolean isCollidable()
+	{
+		return false;
+	}
+
+	@Override
+	public void setCollidable(boolean collidable)
+	{
 
 	}
 

@@ -15,7 +15,6 @@ import com.laytonsmith.commandhelper.CommandHelperPlugin;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.exceptions.CRE.CREFormatException;
-import org.apache.tools.ant.taskdefs.Get;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.item.ItemType;
@@ -58,22 +57,7 @@ public class SpongeConverter extends AbstractConvertor {
 	}
 
 	@Override
-	public MCItemStack GetItemStack(int i, int i1) {
-		return null;
-	}
-
-	@Override
-	public MCItemStack GetItemStack(int i, int i1, int i2) {
-		return null;
-	}
-
-	@Override
 	public MCItemStack GetItemStack(MCMaterial mcMaterial, int qty) {
-		return null;
-	}
-
-	@Override
-	public MCItemStack GetItemStack(MCMaterial mcMaterial, int data, int qty) {
 		return null;
 	}
 
@@ -87,11 +71,6 @@ public class SpongeConverter extends AbstractConvertor {
 	}
 
 	@Override
-	public MCItemStack GetItemStack(String type, int data, int qty) {
-		return null;
-	}
-
-	@Override
 	public MCPotionData GetPotionData(MCPotionType mcPotionType, boolean b, boolean b1) {
 		return null;
 	}
@@ -99,11 +78,6 @@ public class SpongeConverter extends AbstractConvertor {
 	@Override
 	public void Startup(CommandHelperPlugin commandHelperPlugin) {
 
-	}
-
-	@Override
-	public MCMaterial getMaterial(int i) {
-		return null;
 	}
 
 	@Override

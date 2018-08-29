@@ -286,12 +286,6 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 	}
 
 	@Override
-	public void sendBlockChange(MCLocation loc, MCMaterial material, byte data)
-	{
-
-	}
-
-	@Override
 	public void sendBlockChange(MCLocation loc, MCBlockData data)
 	{
 

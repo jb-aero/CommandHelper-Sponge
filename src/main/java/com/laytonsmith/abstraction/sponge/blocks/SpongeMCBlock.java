@@ -60,18 +60,6 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock, MCBlo
 	}
 
 	@Override
-	public void setTypeId(int i)
-	{
-
-	}
-
-	@Override
-	public void setData(byte b)
-	{
-
-	}
-
-	@Override
 	public void setTypeAndData(int i, byte b, boolean b1)
 	{
 
