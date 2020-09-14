@@ -1,7 +1,6 @@
 package com.laytonsmith.abstraction.sponge.entities;
 
 import com.laytonsmith.abstraction.MCEntity;
-import com.laytonsmith.abstraction.MCInventory;
 import com.laytonsmith.abstraction.MCItemStack;
 import com.laytonsmith.abstraction.MCLocation;
 import com.laytonsmith.abstraction.MCNote;
@@ -10,8 +9,10 @@ import com.laytonsmith.abstraction.MCPlayerInventory;
 import com.laytonsmith.abstraction.MCScoreboard;
 import com.laytonsmith.abstraction.blocks.MCBlockData;
 import com.laytonsmith.abstraction.blocks.MCMaterial;
+import com.laytonsmith.abstraction.enums.MCEntityType;
 import com.laytonsmith.abstraction.enums.MCInstrument;
 import com.laytonsmith.abstraction.enums.MCParticle;
+import com.laytonsmith.abstraction.enums.MCPlayerStatistic;
 import com.laytonsmith.abstraction.enums.MCSound;
 import com.laytonsmith.abstraction.enums.MCSoundCategory;
 import com.laytonsmith.abstraction.enums.MCWeather;
@@ -106,6 +107,16 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 
 	@Override
 	public String getPlayerListName() {
+		return null;
+	}
+
+	@Override
+	public String getPlayerListHeader() {
+		return null;
+	}
+
+	@Override
+	public String getPlayerListFooter() {
 		return null;
 	}
 
@@ -232,6 +243,16 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 
 	@Override
 	public void setPlayerListName(String s) {
+
+	}
+
+	@Override
+	public void setPlayerListHeader(String header) {
+
+	}
+
+	@Override
+	public void setPlayerListFooter(String footer) {
 
 	}
 
@@ -440,6 +461,36 @@ public class SpongeMCPlayer extends SpongeMCHuman implements MCPlayer {
 
 	@Override
 	public void updateInventory() {
+
+	}
+
+	@Override
+	public int getStatistic(MCPlayerStatistic stat) {
+		return 0;
+	}
+
+	@Override
+	public int getStatistic(MCPlayerStatistic stat, MCEntityType type) {
+		return 0;
+	}
+
+	@Override
+	public int getStatistic(MCPlayerStatistic stat, MCMaterial type) {
+		return 0;
+	}
+
+	@Override
+	public void setStatistic(MCPlayerStatistic stat, int amount) {
+
+	}
+
+	@Override
+	public void setStatistic(MCPlayerStatistic stat, MCEntityType type, int amount) {
+
+	}
+
+	@Override
+	public void setStatistic(MCPlayerStatistic stat, MCMaterial type, int amount) {
 
 	}
 

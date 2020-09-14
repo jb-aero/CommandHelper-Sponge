@@ -98,8 +98,8 @@ public class SpongeMCLocation implements MCLocation {
 	}
 
 	@Override
-	public MCLocation add(MCLocation mcLocation) {
-		return null;
+	public MCLocation add(MCLocation other) {
+		return new SpongeMCLocation(getHandle().add(other.getX(), other.getY(), other.getZ()));
 	}
 
 	@Override
@@ -119,11 +119,11 @@ public class SpongeMCLocation implements MCLocation {
 
 	@Override
 	public Vector3D toVector() {
-		return null;
+		return new Vector3D(getHandle().getX(), getHandle().getY(), getHandle().getZ());
 	}
 
 	@Override
-	public MCLocation subtract(MCLocation mcLocation) {
+	public MCLocation subtract(MCLocation other) {
 		return null;
 	}
 
@@ -139,27 +139,27 @@ public class SpongeMCLocation implements MCLocation {
 
 	@Override
 	public void setX(double v) {
-
+		throw new UnsupportedOperationException("Locations currently immutable!");
 	}
 
 	@Override
 	public void setY(double v) {
-
+		throw new UnsupportedOperationException("Locations currently immutable!");
 	}
 
 	@Override
 	public void setZ(double v) {
-
+		throw new UnsupportedOperationException("Locations currently immutable!");
 	}
 
 	@Override
 	public void setPitch(float v) {
-
+		throw new UnsupportedOperationException("Locations currently immutable!");
 	}
 
 	@Override
 	public void setYaw(float v) {
-
+		throw new UnsupportedOperationException("Locations currently immutable!");
 	}
 
 	@Override

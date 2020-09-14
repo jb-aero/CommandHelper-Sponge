@@ -1,6 +1,7 @@
 package com.laytonsmith.abstraction.sponge.entities;
 
 import com.laytonsmith.PureUtilities.Vector3D;
+import com.laytonsmith.abstraction.MCAttributeModifier;
 import com.laytonsmith.abstraction.MCEntity;
 import com.laytonsmith.abstraction.MCEntityEquipment;
 import com.laytonsmith.abstraction.MCLivingEntity;
@@ -9,8 +10,9 @@ import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.abstraction.blocks.MCBlock;
 import com.laytonsmith.abstraction.blocks.MCMaterial;
 import com.laytonsmith.abstraction.entities.MCProjectile;
+import com.laytonsmith.abstraction.enums.MCAttribute;
+import com.laytonsmith.abstraction.enums.MCEntityType;
 import com.laytonsmith.abstraction.enums.MCPotionEffectType;
-import com.laytonsmith.abstraction.enums.MCProjectileType;
 import com.laytonsmith.core.constructs.Target;
 import org.spongepowered.api.entity.living.Living;
 
@@ -152,11 +154,6 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	}
 
 	@Override
-	public int getMaximumNoDamageTicks() {
-		return 0;
-	}
-
-	@Override
 	public int getNoDamageTicks() {
 		return 0;
 	}
@@ -222,11 +219,6 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	}
 
 	@Override
-	public void setMaximumNoDamageTicks(int i) {
-
-	}
-
-	@Override
 	public void setNoDamageTicks(int i) {
 
 	}
@@ -258,8 +250,7 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	}
 
 	@Override
-	public void setCollidable(boolean collidable)
-	{
+	public void setCollidable(boolean collidable) {
 
 	}
 
@@ -269,12 +260,62 @@ public class SpongeMCLiving extends SpongeMCEntity implements MCLivingEntity {
 	}
 
 	@Override
-	public MCProjectile launchProjectile(MCProjectileType mcProjectileType) {
+	public boolean isTameable() {
+		return false;
+	}
+
+	@Override
+	public double getAttributeValue(MCAttribute attr) {
+		return 0;
+	}
+
+	@Override
+	public double getAttributeDefault(MCAttribute attr) {
+		return 0;
+	}
+
+	@Override
+	public double getAttributeBase(MCAttribute attr) {
+		return 0;
+	}
+
+	@Override
+	public void setAttributeBase(MCAttribute attr, double base) {
+
+	}
+
+	@Override
+	public void resetAttributeBase(MCAttribute attr) {
+
+	}
+
+	@Override
+	public List<MCAttributeModifier> getAttributeModifiers(MCAttribute attr) {
 		return null;
 	}
 
 	@Override
-	public MCProjectile launchProjectile(MCProjectileType mcProjectileType, Vector3D vector3D) {
+	public void addAttributeModifier(MCAttributeModifier modifier) {
+
+	}
+
+	@Override
+	public void removeAttributeModifier(MCAttributeModifier modifier) {
+
+	}
+
+	@Override
+	public boolean isSleeping() {
+		return false;
+	}
+
+	@Override
+	public MCProjectile launchProjectile(MCEntityType projectile) {
+		return null;
+	}
+
+	@Override
+	public MCProjectile launchProjectile(MCEntityType projectile, Vector3D init) {
 		return null;
 	}
 }

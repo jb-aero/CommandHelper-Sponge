@@ -224,26 +224,27 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 	}
 
 	@Override
-	public MCChunk getChunkAt(MCLocation mcLocation)
-	{
+	public MCChunk getChunkAt(MCLocation mcLocation) {
 		return null;
 	}
 
 	@Override
-	public MCChunk[] getLoadedChunks()
-	{
+	public MCChunk[] getLoadedChunks() {
 		return new MCChunk[0];
 	}
 
 	@Override
-	public boolean regenerateChunk(int i, int i1)
-	{
+	public boolean isChunkLoaded(int x, int z) {
 		return false;
 	}
 
 	@Override
-	public MCEntity spawn(MCLocation mcLocation, Class aClass)
-	{
+	public boolean regenerateChunk(int i, int i1) {
+		return false;
+	}
+
+	@Override
+	public MCEntity spawn(MCLocation mcLocation, Class aClass) {
 		return null;
 	}
 
@@ -266,26 +267,27 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 	}
 
 	@Override
-	public boolean generateTree(MCLocation mcLocation, MCTreeType mcTreeType)
-	{
+	public boolean generateTree(MCLocation mcLocation, MCTreeType mcTreeType) {
 		return false;
 	}
 
 	@Override
-	public void playEffect(MCLocation mcLocation, MCEffect mcEffect, int i, int i1)
-	{
+	public void playEffect(MCLocation mcLocation, MCEffect mcEffect, int i, int i1) {
 
 	}
 
 	@Override
-	public void spawnParticle(MCLocation l, MCParticle pa, int count, double offsetX, double offsetY, double offsetZ, double velocity, Object data)
-	{
+	public void playEffect(MCLocation l, MCEffect mCEffect, Object data, int radius) {
 
 	}
 
 	@Override
-	public void playSound(MCLocation mcLocation, MCSound mcSound, float v, float v1)
-	{
+	public void spawnParticle(MCLocation l, MCParticle pa, int count, double offsetX, double offsetY, double offsetZ, double velocity, Object data) {
+
+	}
+
+	@Override
+	public void playSound(MCLocation mcLocation, MCSound mcSound, float v, float v1) {
 
 	}
 
@@ -398,26 +400,32 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 	}
 
 	@Override
-	public void setTime(long l)
-	{
+	public void setTime(long l) {
 
 	}
 
 	@Override
-	public long getTime()
-	{
+	public long getTime() {
 		return 0;
 	}
 
 	@Override
-	public CArray spawnMob(MCMobs mcMobs, String s, int i, MCLocation mcLocation, Target target)
-	{
+	public void setFullTime(long time) {
+
+	}
+
+	@Override
+	public long getFullTime() {
+		return 0;
+	}
+
+	@Override
+	public CArray spawnMob(MCMobs mcMobs, String s, int i, MCLocation mcLocation, Target target) {
 		return null;
 	}
 
 	@Override
-	public MCFallingBlock spawnFallingBlock(MCLocation loc, MCBlockData data)
-	{
+	public MCFallingBlock spawnFallingBlock(MCLocation loc, MCBlockData data) {
 		return null;
 	}
 
@@ -452,14 +460,17 @@ public class SpongeMCWorld extends SpongeMCMetadatable implements MCWorld
 	}
 
 	@Override
-	public boolean exists()
-	{
+	public boolean exists() {
 		return false;
 	}
 
 	@Override
-	public void save()
-	{
+	public void save() {
+
+	}
+
+	@Override
+	public void setKeepSpawnInMemory(boolean keepLoaded) {
 
 	}
 }

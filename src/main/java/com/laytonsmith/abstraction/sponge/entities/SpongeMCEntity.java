@@ -72,7 +72,7 @@ public class SpongeMCEntity implements MCEntity {
 	}
 
 	@Override
-	public MCEntity getPassenger() {
+	public List<MCEntity> getPassengers() {
 		return null;
 	}
 

@@ -1,12 +1,12 @@
 package com.laytonsmith.commandhelper;
 
-import org.bstats.sponge.Metrics;
 import com.google.inject.Inject;
 import com.laytonsmith.PureUtilities.ClassLoading.ClassDiscovery;
 import com.laytonsmith.PureUtilities.ClassLoading.ClassDiscoveryCache;
 import com.laytonsmith.PureUtilities.Common.OSUtils;
 import com.laytonsmith.PureUtilities.Common.StreamUtils;
 import com.laytonsmith.PureUtilities.ExecutionQueue;
+import com.laytonsmith.PureUtilities.MapBuilder;
 import com.laytonsmith.PureUtilities.SimpleVersion;
 import com.laytonsmith.PureUtilities.TermColors;
 import com.laytonsmith.abstraction.Implementation;
@@ -17,18 +17,24 @@ import com.laytonsmith.abstraction.StaticLayer;
 import com.laytonsmith.abstraction.sponge.SpongeMCCommandBlock;
 import com.laytonsmith.abstraction.sponge.SpongeMCCommandSender;
 import com.laytonsmith.abstraction.sponge.SpongeMCConsole;
+import com.laytonsmith.abstraction.sponge.SpongeMCServer;
 import com.laytonsmith.abstraction.sponge.entities.SpongeMCPlayer;
 import com.laytonsmith.core.AliasCore;
-import com.laytonsmith.core.CHLog;
 import com.laytonsmith.core.Installer;
+import com.laytonsmith.core.MSLog;
 import com.laytonsmith.core.MethodScriptExecutionQueue;
 import com.laytonsmith.core.Prefs;
 import com.laytonsmith.core.Profiles;
 import com.laytonsmith.core.Static;
+import com.laytonsmith.core.apps.AppsApiUtil;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.extensions.ExtensionManager;
 import com.laytonsmith.core.profiler.Profiler;
+import com.laytonsmith.core.telemetry.DefaultTelemetry;
+import com.laytonsmith.core.telemetry.Telemetry;
 import com.laytonsmith.persistence.PersistenceNetwork;
+import org.bstats.sponge.Metrics2;
+import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
@@ -62,8 +68,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Plugin(id = PomData.NAME, name = PomData.BRANDING,
 		version = PomData.VERSION, url = PomData.WEBSITE, description = PomData.DESCRIPTION)
@@ -74,7 +78,11 @@ public class CommandHelperPlugin {
 	public static CommandHelperPlugin self;
 
 	@Inject
-	private Metrics metrics;
+	private Logger logger;
+	private JavaToSLogAdapter logAdapter;
+
+	@Inject
+	private Metrics2 metrics;
 
 	@Inject
 	@ConfigDir(sharedRoot = false)
@@ -89,6 +97,7 @@ public class CommandHelperPlugin {
 	);
 	public PersistenceNetwork persistenceNetwork;
 	public Profiles profiles;
+	private boolean firstLoad = true;
 	//public boolean firstLoad = true;
 	public long interpreterUnlockedUntil = 0;
 	private Thread loadingThread;
@@ -107,9 +116,22 @@ public class CommandHelperPlugin {
 	 * Server Command Listener, for console commands
 	 */
 	// final CommandHelperServerListener serverListener = new CommandHelperServerListener();
+
+	/**
+	 * @return a fake Java Logger that redirects calls to
+	 */
+	public java.util.logging.Logger getLogger() {
+		return logAdapter;
+	}
+
 	@Listener
 	public void onLoad(GamePreInitializationEvent event) {
+
+		AppsApiUtil.ConfigureDefaults();
 		Implementation.setServerType(Implementation.Type.SPONGE);
+
+		self = this;
+		logAdapter = new JavaToSLogAdapter(logger);
 
 		CommandHelperFileLocations.setDefault(new CommandHelperFileLocations(), configDir.toFile());
 		CommandHelperFileLocations.getDefault().getCacheDirectory().mkdirs();
@@ -118,99 +140,113 @@ public class CommandHelperPlugin {
 		try {
 			Prefs.init(CommandHelperFileLocations.getDefault().getPreferencesFile());
 		} catch (IOException ex) {
-			Logger.getLogger(CommandHelperPlugin.class.getName()).log(Level.SEVERE, null, ex);
+			logger.error(null, ex);
 		}
 
 		Prefs.SetColors();
-		CHLog.initialize(CommandHelperFileLocations.getDefault().getConfigDirectory());
 		Installer.Install(CommandHelperFileLocations.getDefault().getConfigDirectory());
-		if (new SimpleVersion(System.getProperty("java.version")).lt(new SimpleVersion("1.7"))) {
-			CHLog.GetLogger().w(CHLog.Tags.GENERAL,
-					"You appear to be running a version of Java older than Java 7. You should have plans"
-							+ " to upgrade at some point, as " + Implementation.GetServerType().getBranding() + " may require it at some point.",
-					Target.UNKNOWN
-			);
-		}
-
-		self = this;
 
 		ClassDiscoveryCache cdc = new ClassDiscoveryCache(CommandHelperFileLocations.getDefault().getCacheDirectory());
-		cdc.setLogger(Logger.getLogger(CommandHelperPlugin.class.getName()));
+		cdc.setLogger(getLogger());
 		ClassDiscovery.getDefaultInstance().setClassDiscoveryCache(cdc);
 		ClassDiscovery.getDefaultInstance().addDiscoveryLocation(ClassDiscovery.GetClassContainer(CommandHelperPlugin.class));
 		ClassDiscovery.getDefaultInstance().addDiscoveryLocation(ClassDiscovery.GetClassContainer(Game.class));
 
-		StreamUtils.GetSystemOut().println("[CommandHelper] Running initial class discovery,"
-				+ " this will probably take a few seconds...");
+		MSLog.initialize(CommandHelperFileLocations.getDefault().getConfigDirectory());
 
-		// ReflectionUtils.set(StaticLayer.class, "convertor", new SpongeConverter()); // ClassDiscovery broke
-		myServer = StaticLayer.GetServer();
-		StreamUtils.GetSystemOut().println("[CommandHelper] Loading extensions in the background...");
+		Telemetry.GetDefault().initializeTelemetry();
+		Telemetry.GetDefault().doNag();
+		Telemetry.GetDefault().log(DefaultTelemetry.StartupModeMetric.class,
+				MapBuilder.start("mode", Implementation.GetServerType().getBranding()), null);
 
 		loadingThread = new Thread("extensionloader") {
 			@Override
 			public void run() {
 				ExtensionManager.AddDiscoveryLocation(CommandHelperFileLocations.getDefault().getExtensionsDirectory());
-
 				if (OSUtils.GetOS() == OSUtils.OS.WINDOWS) {
-					// Using StreamUtils.GetSystemOut() here instead of the logger as the logger doesn't
-					// immediately print to the console.
-					StreamUtils.GetSystemOut().println("[CommandHelper] Caching extensions...");
+					logger.info("Caching extensions in the background...");
 					ExtensionManager.Cache(CommandHelperFileLocations.getDefault().getExtensionCacheDirectory());
-					StreamUtils.GetSystemOut().println("[CommandHelper] Extension caching complete.");
+					logger.info("Extension caching complete.");
 				}
-
-				ExtensionManager.Initialize(ClassDiscovery.getDefaultInstance());
-				StreamUtils.GetSystemOut().println("[CommandHelper] Extension loading complete.");
 			}
 		};
-
 		loadingThread.start();
+
+		if (new SimpleVersion(System.getProperty("java.version")).lt(new SimpleVersion("1.8"))) {
+			MSLog.GetLogger().e(MSLog.Tags.GENERAL, "CommandHelper does not support Java versions older than 8!",
+					Target.UNKNOWN);
+		}
+
+		// ReflectionUtils.set(StaticLayer.class, "convertor", new SpongeConverter()); // ClassDiscovery broke
+		myServer = SpongeMCServer.Get();
 	}
 
 	@Listener
 	public void onEnable(GameInitializationEvent event) {
 		if (loadingThread.isAlive()) {
-			StreamUtils.GetSystemOut().println("[CommandHelper] Waiting for extension loading to complete...");
-
+			logger.info("Waiting for extension caching to complete...");
 			try {
 				loadingThread.join();
 			} catch (InterruptedException ex) {
-				Logger.getLogger(CommandHelperPlugin.class.getName()).log(Level.SEVERE, null, ex);
+				logger.error(null, ex);
 			}
 		}
 
+		if (firstLoad) {
+			// This is not known to be needed yet
+			/*if(Static.getServer().getMinecraftVersion().gte(MCVersion.MC1_15_X)) {
+				// Add dependency on every loaded plugin on Spigot 1.15.2 and later.
+				// This suppresses warnings from the PluginClassLoader due to extensions using a plugin API.
+				// This should be done before ExtensionManager.Initialize().
+				try {
+					Object dependencyGraph = ReflectionUtils.get(SimplePluginManager.class, Bukkit.getPluginManager(),
+							"dependencyGraph");
+					for(Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+						if(plugin == self) {
+							continue;
+						}
+						ReflectionUtils.invokeMethod(dependencyGraph, "putEdge", self.getDescription().getName(),
+								plugin.getName());
+					}
+				} catch (ReflectionUtils.ReflectionException ex) {
+					// While this failed, nothing breaks. The server may still get class load warnings, though.
+				}
+			}*/
+
+			ExtensionManager.Initialize(ClassDiscovery.getDefaultInstance());
+			logger.info("Extensions initialized.");
+		}
+
 		//Metrics
-		metrics.addCustomChart(new Metrics.SimplePie("Server API", () -> "Sponge"));
+		metrics.addCustomChart(new Metrics2.SimplePie("Server API", () -> "Sponge"));
+		metrics.addCustomChart(new Metrics2.SingleLineChart("player_count",
+				() -> Static.getServer().getOnlinePlayers().size()));
 
 		try {
 			//This may seem redundant, but on a /reload, we want to refresh these
 			//properties.
 			Prefs.init(CommandHelperFileLocations.getDefault().getPreferencesFile());
 		} catch (IOException ex) {
-			Logger.getLogger(CommandHelperPlugin.class.getName()).log(Level.SEVERE, null, ex);
+			logger.error(null, ex);
 		}
 		if (Prefs.UseSudoFallback()) {
-			Logger.getLogger(CommandHelperPlugin.class.getName()).log(Level.WARNING,
-					"In your preferences, use-sudo-fallback is turned on. Consider turning this off if you can."
-			);
+			logger.warn("In your preferences, use-sudo-fallback is turned on. Consider turning this off if you can.");
 		}
-		CHLog.initialize(CommandHelperFileLocations.getDefault().getConfigDirectory());
+		MSLog.initialize(CommandHelperFileLocations.getDefault().getConfigDirectory());
 
-		String script_name = Prefs.ScriptName();
-		String main_file = Prefs.MainFile();
+		String scriptName = Prefs.ScriptName();
+		String mainFile = Prefs.MainFile();
 		boolean showSplashScreen = Prefs.ShowSplashScreen();
 		if (showSplashScreen) {
 			StreamUtils.GetSystemOut().println(TermColors.reset());
 			//StreamUtils.GetSystemOut().flush();
-			StreamUtils.GetSystemOut().println("\n\n\n" + Static.Logo());
+			StreamUtils.GetSystemOut().println("\n\n" + Static.Logo());
 		}
-		ac = new AliasCore(new File(CommandHelperFileLocations.getDefault().getConfigDirectory(), script_name),
+		ac = new AliasCore(new File(CommandHelperFileLocations.getDefault().getConfigDirectory(), scriptName),
 				CommandHelperFileLocations.getDefault().getLocalPackagesDirectory(),
 				CommandHelperFileLocations.getDefault().getPreferencesFile(),
-				new File(CommandHelperFileLocations.getDefault().getConfigDirectory(), main_file), this
-		);
-		ac.reload(null, null, true);
+				new File(CommandHelperFileLocations.getDefault().getConfigDirectory(), mainFile), this);
+		ac.reload(null, null, this.firstLoad);
 
 		//Clear out our hostname cache
 		hostnameLookupCache = new ConcurrentHashMap<>();
@@ -239,7 +275,9 @@ public class CommandHelperPlugin {
 		playerListener.loadGlobalAliases();
 //		interpreterListener.reload();
 
-		Static.getLogger().log(Level.INFO, "[CommandHelper] CommandHelper {0} enabled", PomData.VERSION);
+		firstLoad = false;
+
+		logger.info("CommandHelper {} enabled", PomData.VERSION);
 	}
 
 	@Listener

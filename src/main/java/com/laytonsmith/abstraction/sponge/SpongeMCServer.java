@@ -1,6 +1,23 @@
 package com.laytonsmith.abstraction.sponge;
 
-import com.laytonsmith.abstraction.*;
+import com.laytonsmith.abstraction.MCBossBar;
+import com.laytonsmith.abstraction.MCCommandException;
+import com.laytonsmith.abstraction.MCCommandMap;
+import com.laytonsmith.abstraction.MCCommandSender;
+import com.laytonsmith.abstraction.MCConsoleCommandSender;
+import com.laytonsmith.abstraction.MCEntity;
+import com.laytonsmith.abstraction.MCInventory;
+import com.laytonsmith.abstraction.MCInventoryHolder;
+import com.laytonsmith.abstraction.MCItemFactory;
+import com.laytonsmith.abstraction.MCItemStack;
+import com.laytonsmith.abstraction.MCMerchant;
+import com.laytonsmith.abstraction.MCOfflinePlayer;
+import com.laytonsmith.abstraction.MCPlayer;
+import com.laytonsmith.abstraction.MCPluginManager;
+import com.laytonsmith.abstraction.MCRecipe;
+import com.laytonsmith.abstraction.MCScoreboard;
+import com.laytonsmith.abstraction.MCServer;
+import com.laytonsmith.abstraction.MCWorld;
 import com.laytonsmith.abstraction.blocks.MCBlockData;
 import com.laytonsmith.abstraction.enums.MCBarColor;
 import com.laytonsmith.abstraction.enums.MCBarStyle;
@@ -11,12 +28,14 @@ import com.laytonsmith.abstraction.sponge.entities.SpongeMCPlayer;
 import com.laytonsmith.commandhelper.CommandHelperPlugin;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.scoreboard.Scoreboard;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.chat.ChatTypes;
 import org.spongepowered.api.world.World;
 
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -29,13 +48,21 @@ public class SpongeMCServer implements MCServer {
 	Game game;
 	MCVersion version;
 
+	public SpongeMCServer() {
+		this.game = Sponge.getGame();
+	}
+
 	public SpongeMCServer(Game game) {
 		this.game = game;
 	}
 
+	public static SpongeMCServer Get() {
+		return new SpongeMCServer();
+	}
+
 	@Override
-	public Server getHandle() {
-		return game.getServer();
+	public Game getHandle() {
+		return game;
 	}
 
 	public Server __Server() {
@@ -68,6 +95,11 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
+	public MCPlayer getPlayerExact(String name) {
+		return null;
+	}
+
+	@Override
 	public MCPlayer getPlayer(String name) {
 		return null;
 	}
@@ -92,17 +124,21 @@ public class SpongeMCServer implements MCServer {
 
 	@Override
 	public List<MCWorld> getWorlds() {
-		return null;
+		List<MCWorld> worlds = new ArrayList<>();
+		for (World world : __Server().getWorlds()) {
+			worlds.add(new SpongeMCWorld(world));
+		}
+		return worlds;
 	}
 
 	@Override
 	public void broadcastMessage(String message) {
-		getHandle().getBroadcastChannel().send(Text.of(message), ChatTypes.SYSTEM);
+		__Server().getBroadcastChannel().send(Text.of(message), ChatTypes.SYSTEM);
 	}
 
 	@Override
 	public void broadcastMessage(String message, String permission) {
-		getHandle().getOnlinePlayers().stream().filter(p -> p.hasPermission(permission))
+		__Server().getOnlinePlayers().stream().filter(p -> p.hasPermission(permission))
 				.forEach(p -> p.sendMessage(ChatTypes.SYSTEM, Text.of(message)));
 	}
 
@@ -300,6 +336,11 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
+	public boolean removeRecipe(String key) {
+		return false;
+	}
+
+	@Override
 	public List<MCRecipe> getRecipesFor(MCItemStack result) {
 		return null;
 	}
@@ -335,14 +376,17 @@ public class SpongeMCServer implements MCServer {
 	}
 
 	@Override
-	public MCBossBar createBossBar(String title, MCBarColor color, MCBarStyle style)
-	{
+	public MCBossBar createBossBar(String title, MCBarColor color, MCBarStyle style) {
 		return null;
 	}
 
 	@Override
-	public MCBlockData createBlockData(String data)
-	{
+	public MCBlockData createBlockData(String data) {
+		return null;
+	}
+
+	@Override
+	public MCMerchant createMerchant(String title) {
 		return null;
 	}
 }

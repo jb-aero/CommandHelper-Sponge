@@ -126,26 +126,42 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock, MCBlo
 	}
 
 	@Override
-	public MCLocation getLocation()
-	{
+	public MCLocation getLocation() {
 		return null;
 	}
 
 	@Override
-	public void update()
-	{
+	public void update() {
 
 	}
 
 	@Override
-	public MCSign getSign()
-	{
+	public boolean isLockable() {
+		return false;
+	}
+
+	@Override
+	public boolean isLocked() {
+		return false;
+	}
+
+	@Override
+	public String getLock() {
 		return null;
 	}
 
 	@Override
-	public boolean isSign()
-	{
+	public void setLock(String key) {
+
+	}
+
+	@Override
+	public MCSign getSign() {
+		return null;
+	}
+
+	@Override
+	public boolean isSign() {
 		return false;
 	}
 
@@ -192,44 +208,52 @@ public class SpongeMCBlock extends SpongeMCMetadatable implements MCBlock, MCBlo
 	}
 
 	@Override
-	public boolean isOccluding()
-	{
+	public boolean isOccluding() {
 		return false;
 	}
 
 	@Override
-	public boolean isBurnable()
-	{
+	public boolean isBurnable() {
 		return false;
 	}
 
 	@Override
-	public Collection<MCItemStack> getDrops()
-	{
+	public boolean isPassable() {
+		return false;
+	}
+
+	@Override
+	public Collection<MCItemStack> getDrops() {
 		return null;
 	}
 
 	@Override
-	public Collection<MCItemStack> getDrops(MCItemStack mcItemStack)
-	{
+	public Collection<MCItemStack> getDrops(MCItemStack mcItemStack) {
 		return null;
 	}
 
 	@Override
-	public int getLightLevel()
-	{
+	public int getLightLevel() {
 		return 0;
 	}
 
 	@Override
-	public int getBlockPower()
-	{
+	public int getLightFromSky() {
 		return 0;
 	}
 
 	@Override
-	public boolean isBlockPowered()
-	{
+	public int getLightFromBlocks() {
+		return 0;
+	}
+
+	@Override
+	public int getBlockPower() {
+		return 0;
+	}
+
+	@Override
+	public boolean isBlockPowered() {
 		return false;
 	}
 

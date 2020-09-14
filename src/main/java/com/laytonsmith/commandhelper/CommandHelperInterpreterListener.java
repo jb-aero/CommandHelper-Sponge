@@ -6,40 +6,40 @@ import com.laytonsmith.abstraction.MCPlayer;
 import com.laytonsmith.abstraction.StaticLayer;
 import com.laytonsmith.abstraction.enums.MCChatColor;
 import com.laytonsmith.core.MethodScriptCompiler;
-import com.laytonsmith.core.MethodScriptComplete;
 import com.laytonsmith.core.ParseTree;
 import com.laytonsmith.core.Static;
-import com.laytonsmith.core.constructs.Token;
+import com.laytonsmith.core.compiler.CompilerEnvironment;
+import com.laytonsmith.core.compiler.TokenStream;
 import com.laytonsmith.core.environments.CommandHelperEnvironment;
 import com.laytonsmith.core.environments.Environment;
 import com.laytonsmith.core.environments.GlobalEnv;
+import com.laytonsmith.core.environments.RuntimeMode;
+import com.laytonsmith.core.environments.StaticRuntimeEnv;
 import com.laytonsmith.core.exceptions.CancelCommandException;
 import com.laytonsmith.core.exceptions.ConfigCompileException;
 import com.laytonsmith.core.exceptions.ConfigCompileGroupException;
 import com.laytonsmith.core.exceptions.ConfigRuntimeException;
-import com.laytonsmith.core.taskmanager.TaskManager;
+import com.laytonsmith.core.taskmanager.TaskManagerImpl;
 import org.spongepowered.api.event.command.SendCommandEvent;
 import org.spongepowered.api.event.message.MessageChannelEvent.Chat;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
  *
  */
 public class CommandHelperInterpreterListener {
 
-	private Set<String> interpreterMode = Collections.synchronizedSet(new HashSet<String>());
+	private Set<String> interpreterMode = Collections.synchronizedSet(new HashSet<>());
 	private CommandHelperPlugin plugin;
-	Map<String, String> multilineMode = new HashMap<String, String>();
+	Map<String, String> multilineMode = new HashMap<>();
 
 	public boolean isInInterpreterMode(String player) {
 		return (interpreterMode.contains(player));
@@ -52,15 +52,8 @@ public class CommandHelperInterpreterListener {
 	public void onPlayerChat(Chat event, MCPlayer player) {
 		if (interpreterMode.contains(player.getName())) {
 			event.setCancelled(true);
-			StaticLayer.SetFutureRunnable(null, 0, new Runnable() {
-
-				@Override
-				public void run() {
-					textLine(player, event.getRawMessage().toPlain());
-				}
-			});
+			StaticLayer.SetFutureRunnable(null, 0, () -> textLine(player, event.getRawMessage().toPlain()));
 		}
-
 	}
 
 	public void onPlayerQuit(String name) {
@@ -129,52 +122,61 @@ public class CommandHelperInterpreterListener {
 		}
 	}
 
-	public void reload() {
-	}
-
+	/**
+	 * Executes the given script as the given player in a new environment. Exceptions in script runtime are printed
+	 * to the player.
+	 * If the player is in interpreter mode, then this mode is removed until the script execution terminates.
+	 *
+	 * @param script - The script to execute.
+	 * @param p      - The player to execute the script as.
+	 * @throws ConfigCompileException      If compilation fails.
+	 * @throws ConfigCompileGroupException Container for multiple {@link ConfigCompileException}s.
+	 */
 	public void execute(String script, final MCPlayer p) throws ConfigCompileException, ConfigCompileGroupException {
-		ParseTree tree = MethodScriptCompiler.compile(MethodScriptCompiler.lex(script,
-				new File("Interpreter"), true));
-		interpreterMode.remove(p.getName());
-		GlobalEnv gEnv = new GlobalEnv(plugin.executionQueue, plugin.profiler, plugin.persistenceNetwork,
+		TokenStream stream = MethodScriptCompiler.lex(script, null, new File("Interpreter"), true);
+		GlobalEnv gEnv = new GlobalEnv(plugin.executionQueue,
 				CommandHelperFileLocations.getDefault().getConfigDirectory(),
-				plugin.profiles, new TaskManager()
-		);
+				EnumSet.of(RuntimeMode.EMBEDDED, RuntimeMode.INTERPRETER));
+		StaticRuntimeEnv staticRuntimeEnv = new StaticRuntimeEnv(plugin.profiler,
+				plugin.persistenceNetwork, plugin.profiles, new TaskManagerImpl());
 		gEnv.SetDynamicScriptingMode(true);
 		CommandHelperEnvironment cEnv = new CommandHelperEnvironment();
 		cEnv.SetPlayer(p);
-		Environment env = Environment.createEnvironment(gEnv, cEnv);
+		CompilerEnvironment compilerEnv = new CompilerEnvironment();
+		compilerEnv.setLogCompilerWarnings(false);
+		Environment env = Environment.createEnvironment(gEnv, staticRuntimeEnv, cEnv, compilerEnv);
+		ParseTree tree = MethodScriptCompiler.compile(stream, env, env.getEnvClasses());
+		final boolean isInterpeterMode = interpreterMode.remove(p.getName());
 		try {
 			MethodScriptCompiler.registerAutoIncludes(env, null);
-			MethodScriptCompiler.execute(tree, env, new MethodScriptComplete() {
-
-				@Override
-				public void done(String output) {
-					output = output.trim();
-					if (output.isEmpty()) {
-						Static.SendMessage(p, ":");
+			MethodScriptCompiler.execute(tree, env, output -> {
+				output = output.trim();
+				if (output.isEmpty()) {
+					Static.SendMessage(p, ":");
+				} else {
+					if (output.startsWith("/")) {
+						//Run the command
+						Static.SendMessage(p, ":" + MCChatColor.YELLOW + output);
+						p.chat(output);
 					} else {
-						if (output.startsWith("/")) {
-							//Run the command
-							Static.SendMessage(p, ":" + MCChatColor.YELLOW + output);
-							p.chat(output);
-						} else {
-							//output the results
-							Static.SendMessage(p, ":" + MCChatColor.GREEN + output);
-						}
+						//output the results
+						Static.SendMessage(p, ":" + MCChatColor.GREEN + output);
 					}
+				}
+				if (isInterpeterMode) {
 					interpreterMode.add(p.getName());
 				}
 			}, null);
+			return;
 		} catch (CancelCommandException e) {
-			interpreterMode.add(p.getName());
 		} catch (ConfigRuntimeException e) {
 			ConfigRuntimeException.HandleUncaughtException(e, env);
 			Static.SendMessage(p, MCChatColor.RED + e.toString());
-			interpreterMode.add(p.getName());
 		} catch (Exception e) {
 			Static.SendMessage(p, MCChatColor.RED + e.toString());
-			Logger.getLogger(CommandHelperInterpreterListener.class.getName()).log(Level.SEVERE, null, e);
+			Static.getLogger().log(Level.SEVERE, null, e);
+		}
+		if (isInterpeterMode) {
 			interpreterMode.add(p.getName());
 		}
 	}

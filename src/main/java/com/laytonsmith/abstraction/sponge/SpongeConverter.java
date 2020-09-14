@@ -1,9 +1,29 @@
 package com.laytonsmith.abstraction.sponge;
 
-import com.laytonsmith.abstraction.*;
+import com.laytonsmith.abstraction.AbstractConvertor;
 import com.laytonsmith.abstraction.Implementation.Type;
+import com.laytonsmith.abstraction.MCAttributeModifier;
+import com.laytonsmith.abstraction.MCColor;
+import com.laytonsmith.abstraction.MCEnchantment;
+import com.laytonsmith.abstraction.MCEntity;
+import com.laytonsmith.abstraction.MCFireworkBuilder;
+import com.laytonsmith.abstraction.MCInventory;
+import com.laytonsmith.abstraction.MCInventoryHolder;
+import com.laytonsmith.abstraction.MCItemMeta;
+import com.laytonsmith.abstraction.MCItemStack;
+import com.laytonsmith.abstraction.MCLocation;
+import com.laytonsmith.abstraction.MCMetadataValue;
+import com.laytonsmith.abstraction.MCNote;
+import com.laytonsmith.abstraction.MCPattern;
+import com.laytonsmith.abstraction.MCPlugin;
+import com.laytonsmith.abstraction.MCPluginMeta;
+import com.laytonsmith.abstraction.MCPotionData;
+import com.laytonsmith.abstraction.MCRecipe;
+import com.laytonsmith.abstraction.MCWorld;
 import com.laytonsmith.abstraction.blocks.MCMaterial;
+import com.laytonsmith.abstraction.enums.MCAttribute;
 import com.laytonsmith.abstraction.enums.MCDyeColor;
+import com.laytonsmith.abstraction.enums.MCEquipmentSlot;
 import com.laytonsmith.abstraction.enums.MCPatternShape;
 import com.laytonsmith.abstraction.enums.MCPotionType;
 import com.laytonsmith.abstraction.enums.MCRecipeType;
@@ -14,13 +34,13 @@ import com.laytonsmith.annotations.convert;
 import com.laytonsmith.commandhelper.CommandHelperPlugin;
 import com.laytonsmith.core.constructs.Target;
 import com.laytonsmith.core.environments.Environment;
-import com.laytonsmith.core.exceptions.CRE.CREFormatException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.item.ItemType;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @convert(type = Type.SPONGE)
 public class SpongeConverter extends AbstractConvertor {
@@ -76,19 +96,27 @@ public class SpongeConverter extends AbstractConvertor {
 	}
 
 	@Override
+	public MCAttributeModifier GetAttributeModifier(MCAttribute attr, UUID id, String name, double amt, MCAttributeModifier.Operation op, MCEquipmentSlot slot) {
+		return null;
+	}
+
+	@Override
 	public void Startup(CommandHelperPlugin commandHelperPlugin) {
 
 	}
 
 	@Override
-	public MCMaterial GetMaterialFromLegacy(String name, int data)
-	{
+	public MCMaterial[] GetMaterialValues() {
+		return new MCMaterial[0];
+	}
+
+	@Override
+	public MCMaterial GetMaterialFromLegacy(String name, int data) {
 		return null;
 	}
 
 	@Override
-	public MCMaterial GetMaterialFromLegacy(int id, int data)
-	{
+	public MCMaterial GetMaterialFromLegacy(int id, int data) {
 		return null;
 	}
 
@@ -132,8 +160,7 @@ public class SpongeConverter extends AbstractConvertor {
 	}
 
 	@Override
-	public MCInventoryHolder CreateInventoryHolder(String id)
-	{
+	public MCInventoryHolder CreateInventoryHolder(String id, String title) {
 		return null;
 	}
 
@@ -148,7 +175,7 @@ public class SpongeConverter extends AbstractConvertor {
 	}
 
 	@Override
-	public MCColor GetColor(String s, Target target) throws CREFormatException {
+	public MCColor GetColor(String s, Target target) {
 		return null;
 	}
 

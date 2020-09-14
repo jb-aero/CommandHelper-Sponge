@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>commandhelper</artifactId>
-			<version>3.3.2-SNAPSHOT</version>
+			<version>3.3.4-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.spigotmc</groupId>
@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>org.spongepowered</groupId>
 			<artifactId>spongeapi</artifactId>
-			<version>7.0.0</version>
+			<version>7.3.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<!--<dependency>
@@ -125,7 +125,8 @@
 									<excludes>
 										<exclude>com/laytonsmith/abstraction/bukkit/**</exclude>
 										<exclude>com/laytonsmith/abstraction/enums/bukkit/**</exclude>
-										<exclude>com/laytonsmith/commandhelper/**</exclude>
+										<exclude>com/laytonsmith/commandhelper/Bukkit*</exclude>
+										<exclude>com/laytonsmith/commandhelper/Metrics*</exclude>
 										<exclude>com/laytonsmith/libs/org/mcstats/**</exclude>
 										<exclude>jarInfo.ser</exclude>
 										<exclude>plugin.yml</exclude>
